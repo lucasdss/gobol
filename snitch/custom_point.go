@@ -88,7 +88,7 @@ func (p *CustomPoint) IsValueNull() bool {
 func (p *CustomPoint) Run() {
 	send := p.pre(p)
 
-	ts := atomic.LoadInt64(&p.timestamp)
+	ts := p.GetTimestamp()
 	if ts == 0 {
 		ts = time.Now().Unix()
 	}

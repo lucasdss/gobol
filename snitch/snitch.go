@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"runtime"
-	"sync"
 	"syscall"
 	"time"
 
@@ -33,8 +32,6 @@ type Stats struct {
 	points   map[string]*CustomPoint
 	hBuffer  []message
 	receiver chan message
-
-	mutex sync.Mutex
 }
 
 // New creates a new stats

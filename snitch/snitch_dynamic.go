@@ -33,8 +33,6 @@ func (st *Stats) getPoint(
 	aggregation, interval string,
 	keep, nullable bool,
 ) (*CustomPoint, error) {
-	st.mutex.Lock()
-	defer st.mutex.Unlock()
 
 	key := keyFromMetricID(metricName, tags)
 	if metric, ok := st.points[key]; ok {
@@ -63,8 +61,10 @@ func (st *Stats) getPoint(
 			}
 			switch p.aggregation {
 			case "avg":
-				if p.GetValue() != 0 && p.GetCount() != 0 {
-					p.SetValue(p.GetValue() / float64(p.GetCount()))
+				y := p.GetValue()
+				x := p.GetCount()
+				if y != 0 && x != 0 {
+					p.SetValue(y / float64(x))
 				}
 			}
 			return true
