@@ -45,7 +45,8 @@ func (p *CustomPoint) SetCount(i int64) {
 
 // SetValue sets value to v.
 func (p *CustomPoint) SetValue(v float64) {
-	atomic.StoreUint64(&p.value, uint64(v))
+
+	atomic.StoreUint64(&p.value, math.Float64bits(v))
 	atomic.StoreUint32(&p.valNull, 0)
 }
 
