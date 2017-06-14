@@ -54,7 +54,7 @@ func (st *Stats) getPoint(
 		aggregation: aggregation,
 		keepValue:   keep,
 		sendOnNull:  nullable,
-		valNull:     true,
+		valNull:     1,
 		interval:    interval,
 		sender:      st.receiver,
 		pre: func(p *CustomPoint) bool {
