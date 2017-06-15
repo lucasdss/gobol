@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"runtime"
+	"sync"
 	"time"
 
 	"github.com/robfig/cron"
@@ -31,6 +32,8 @@ type Stats struct {
 	points   map[string]*CustomPoint
 	hBuffer  []message
 	receiver chan message
+
+	mtx sync.RWMutex
 }
 
 // New creates a new stats
@@ -95,9 +98,11 @@ func (st *Stats) start(runtime bool) {
 		return
 	}
 
+	st.mtx.RLock()
 	for _, p := range st.points {
 		st.cron.AddJob(p.interval, p)
 	}
+	st.mtx.RUnlock()
 
 	if st.proto == "udp" {
 		go st.clientUDP()

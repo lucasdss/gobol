@@ -39,9 +39,12 @@ func (st *Stats) getPoint(
 ) (*CustomPoint, error) {
 
 	key := keyFromMetricID(metricName, tags)
+	st.mtx.RLock()
 	if metric, ok := st.points[key]; ok {
+		st.mtx.RUnlock()
 		return metric, nil
 	}
+	st.mtx.RUnlock()
 
 	if _, err := cron.Parse(interval); err != nil {
 		return nil, err
@@ -101,7 +104,10 @@ func (st *Stats) getPoint(
 		metric.tags[k] = v
 	}
 
+	st.mtx.Lock()
 	st.points[key] = metric
+	st.mtx.Unlock()
+
 	st.cron.AddJob(interval, metric)
 	return metric, nil
 }
