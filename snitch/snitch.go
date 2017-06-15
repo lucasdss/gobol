@@ -10,7 +10,6 @@ import (
 	"net/http"
 	"os"
 	"runtime"
-	"syscall"
 	"time"
 
 	"github.com/robfig/cron"
@@ -212,10 +211,4 @@ func (st *Stats) clientHTTP() {
 			resp.Body.Close()
 		}
 	}
-}
-
-func getTimeInMilliSeconds() int64 {
-	var tv syscall.Timeval
-	syscall.Gettimeofday(&tv)
-	return (int64(tv.Sec)*1e3 + int64(tv.Usec)/1e3)
 }

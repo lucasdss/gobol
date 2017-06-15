@@ -2,7 +2,6 @@ package snitch
 
 import (
 	"errors"
-	"fmt"
 	"sort"
 	"strings"
 
@@ -13,7 +12,12 @@ import (
 func keyFromMetricID(metric string, tags map[string]string) string {
 	merged := []string{}
 	for k, v := range tags {
-		merged = append(merged, fmt.Sprintf("%s=%s", k, v))
+		s := make([]byte, len(k)+len(v)+1)
+		copy(s, k)
+		copy(s[len(k):], "=")
+		copy(s[len(k)+1:], v)
+		//merged = append(merged, fmt.Sprintf("%s=%s", k, v))
+		merged = append(merged, string(s))
 	}
 	sort.Strings(merged)
 	merged = append(merged, metric)
